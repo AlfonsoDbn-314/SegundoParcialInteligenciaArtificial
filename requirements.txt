@@ -1,0 +1,10 @@
+langchain==0.3.7
+langchain-community==0.3.7
+langchain-ollama==0.2.1
+chromadb==0.5.18
+pymupdf==1.24.11
+gradio==5.6.0
+fastapi==0.115.4
+uvicorn==0.32.0
+groq==0.11.0
+python-dotenv==1.0.1

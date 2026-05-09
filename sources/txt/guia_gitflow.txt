@@ -1,0 +1,119 @@
+GUÍA DIDÁCTICA: GITFLOW
+Semana 1 — Introducción a GitFlow
+
+¿Qué es GitFlow?
+GitFlow es un modelo de ramificación para Git creado por Vincent Driessen en 2010.
+Define un conjunto estricto de reglas sobre cómo se crean y fusionan las ramas.
+Su objetivo es organizar el desarrollo de software en equipos de forma ordenada.
+GitFlow es ideal para proyectos con ciclos de lanzamiento programados.
+
+Ramas Principales
+GitFlow define dos ramas permanentes en todo proyecto.
+La rama main contiene el código en producción, estable y listo para el usuario final.
+La rama develop contiene el código de integración donde se unen todas las features.
+Nunca se trabaja directamente sobre main ni sobre develop.
+
+Ramas de Soporte
+GitFlow define tres tipos de ramas temporales.
+Las ramas feature se crean desde develop para desarrollar nuevas funcionalidades.
+Las ramas release se crean desde develop para preparar un nuevo lanzamiento.
+Las ramas hotfix se crean desde main para corregir errores críticos en producción.
+
+Semana 2 — Ramas Feature
+
+¿Qué es una rama feature?
+Una rama feature representa una nueva funcionalidad o mejora del sistema.
+Se crea a partir de develop y se fusiona de regreso en develop al terminar.
+El nombre debe seguir el formato: feature/nombre-de-la-funcionalidad.
+Ejemplo: feature/login-usuario, feature/carrito-compras.
+
+Ciclo de vida de una feature
+Paso 1: Crear la rama desde develop.
+Paso 2: Desarrollar la funcionalidad con commits frecuentes.
+Paso 3: Hacer pull request hacia develop.
+Paso 4: Revisión de código por el equipo.
+Paso 5: Merge a develop y eliminar la rama feature.
+
+Comandos para ramas feature
+git checkout develop
+git checkout -b feature/nueva-funcionalidad
+git add .
+git commit -m "feat: descripción de la funcionalidad"
+git checkout develop
+git merge feature/nueva-funcionalidad
+git branch -d feature/nueva-funcionalidad
+
+Semana 3 — Ramas Release
+
+¿Qué es una rama release?
+Una rama release prepara el código para un nuevo lanzamiento a producción.
+Se crea desde develop cuando las features del sprint están completas.
+El formato del nombre es: release/numero-de-version. Ejemplo: release/1.2.0.
+En esta rama solo se permiten correcciones de bugs menores y ajustes de versión.
+No se agregan nuevas funcionalidades en una rama release.
+
+Fusión de una release
+Al terminar la rama release se fusiona en dos lugares simultáneamente.
+Primero se fusiona en main para marcar la nueva versión en producción.
+Luego se fusiona en develop para que los cambios lleguen al flujo de desarrollo.
+Finalmente se crea un tag en main con el número de versión.
+
+Comandos para ramas release
+git checkout develop
+git checkout -b release/1.2.0
+git commit -m "chore: bump version to 1.2.0"
+git checkout main
+git merge release/1.2.0
+git tag -a v1.2.0 -m "Version 1.2.0"
+git checkout develop
+git merge release/1.2.0
+git branch -d release/1.2.0
+
+Semana 4 — Ramas Hotfix
+
+¿Qué es una rama hotfix?
+Una rama hotfix corrige errores críticos detectados directamente en producción.
+Es la única rama que se crea desde main en lugar de develop.
+El formato es: hotfix/descripcion-del-error. Ejemplo: hotfix/fix-login-crash.
+Permite corregir producción sin interrumpir el desarrollo en curso en develop.
+
+Fusión de un hotfix
+Al terminar el hotfix se fusiona en main y en develop simultáneamente.
+Se crea un tag en main con el nuevo número de versión parcheado.
+Ejemplo: si la versión actual es 1.2.0, el hotfix genera la versión 1.2.1.
+
+Comandos para ramas hotfix
+git checkout main
+git checkout -b hotfix/fix-login-crash
+git add .
+git commit -m "fix: corrige crash en login"
+git checkout main
+git merge hotfix/fix-login-crash
+git tag -a v1.2.1 -m "Hotfix 1.2.1"
+git checkout develop
+git merge hotfix/fix-login-crash
+git branch -d hotfix/fix-login-crash
+
+Semana 5 — Buenas Prácticas y Convenciones
+
+Conventional Commits
+GitFlow se combina con Conventional Commits para mensajes de commit claros.
+feat: se usa para nuevas funcionalidades. Ejemplo: feat: agrega autenticación OAuth.
+fix: se usa para corrección de bugs. Ejemplo: fix: corrige validación de email.
+chore: se usa para tareas de mantenimiento. Ejemplo: chore: actualiza dependencias.
+docs: se usa para cambios en documentación. Ejemplo: docs: actualiza README.
+refactor: se usa para reestructuración sin cambio funcional.
+
+Reglas de oro de GitFlow
+Regla 1: Nunca hacer commit directamente en main.
+Regla 2: Nunca hacer commit directamente en develop sin pasar por feature.
+Regla 3: Toda feature debe tener su propio pull request con revisión de código.
+Regla 4: Las ramas release y hotfix son de corta duración, máximo 2 días.
+Regla 5: Siempre crear un tag al fusionar en main.
+Regla 6: Eliminar las ramas temporales después del merge para mantener limpio el repositorio.
+
+Comparación GitFlow vs Trunk Based Development
+GitFlow es ideal para equipos con releases programados y versiones múltiples.
+Trunk Based Development es ideal para equipos con despliegue continuo (CI/CD).
+GitFlow tiene más overhead de gestión de ramas pero mayor control de versiones.
+Trunk Based Development es más simple pero requiere mayor cobertura de tests.
